@@ -1,9 +1,191 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Check Vaccination Slots By District</title>
+    <title>Check Vaccination Availibility</title>
+    <style>
+      body {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size: 14px;
+      }
+      td {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+      }
+      .result-td {
+        background: rgb(247, 247, 247);
+        height: 400px;
+        overflow-y: auto;
+      }
+      .success {
+        font-size : 15px;
+        background: rgb(19, 126, 5) !important;
+        color: #fff;
+      }
+      ul {
+        padding-left: 0;
+        margin: 0;
+      }
+      li {
+        list-style: none;
+        color: #ccc;
+        border-bottom: 1px solid #333;
+        font-size: 12px;
+      }
+      p {
+        margin: 5px 0;
+      }
+    </style>
   </head>
 <body>
-<h1>Enter Information</h1>
+  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+    <tr>
+      <td colspan="4" align="center"><h3>Check Vaccination Availibility</h3></td>
+    </tr>
+    <tr>
+      <td>Select District</td>
+      <td>
+        <select id="district" name="district">
+          <option value="505">Jaipur 1</option>
+        </select>
+      </td>
+      <td>Select Age</td>
+      <td>
+        <input type="radio" name="age" id="age18" value="18" checked> <label for="age18">18-44</label> &nbsp;&nbsp;
+        <input type="radio" name="age" id="age45" value="45"> <label for="age45">45+</label>
+      </td>
+    </tr>
+    <tr>
+      <td>Select Date</td>
+      <td>
+        <input type="date" name="v_date" id="v_date" value="" />
+      </td>
+      <td>Select Dose</td>
+      <td>
+        <input type="radio" name="dose" id="dose1" value="1" checked> <label for="dose1">Dose 1</label> &nbsp;&nbsp;
+        <input type="radio" name="dose" id="dose2" value="2"> <label for="dose2">Dose 2</label>
+      </td>
+    </tr>
+    <tr>
+      <td>Check in Every</td>
+      <td>
+        <select id="timeout" name="timeout">
+          <option value="5" selected>5 Sec</option>
+          <option value="15">15 Sec</option>
+          <option value="30">30 Sec</option>
+          <option value="60">1 Min</option>
+          <option value="300">5 Min</option>
+        </select>
+      </td>
+      <td colspan="2">
+        <button id="submit" type="button" onclick="submitForm()">Check Availibility</button>
+        <button id="cancel" type="button" onclick="cancelRequest()">Cancel</button>
+        <span id="loading"></span>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+    <tr>
+      <td colspan="4" align="center"><h3>Result Display</h3></td>
+    </tr>
+    <tr>
+      <td colspan="4" class="result-td" valign="top">
+        <ul class="result-ul" id="resultUi">
+          <!-- <li class="success">
+            <p><b>Available - 100 slots - 18+ Age - 21-05-2021 - Free - COVISHIELD</b></p>
+            <p>Bhabhru Phc, Bhabhru, Virat Nagar, Jaipur I  - 04:50PM</p>
+          </li> -->
+        </ul>
+      </td>
+    </tr>
+  </table>
+  <script type="text/javascript">
+    var runInterval;
+    var td = new Date();
+    var m = td.getMonth()+1;
+    var cdate = td.getFullYear()+'-'+(('0' + m).slice(-2))+'-'+td.getDate();
+    document.getElementById('v_date').value = cdate;
+
+    function submitForm() {
+      var district_id = document.getElementById('district').value;
+      var age = (document.getElementById('age18').checked)?18:45;
+      var v_date = document.getElementById('v_date').value;
+      var dose_type = (document.getElementById('dose1').checked)?1:2;
+      var runtime = document.getElementById('timeout').value;
+      runtime = runtime*1000;
+      
+      if(v_date == '' || v_date == null) {
+        alert('Select date');
+        return false;
+      }
+      var d = new Date(v_date);
+      var month = d.getMonth()+1;
+      var new_date = d.getDate()+'-'+(('0' + month).slice(-2))+'-'+d.getFullYear();
+      
+      runAjax(district_id, age, new_date, dose_type);
+      runInterval = setInterval(function() {
+        runAjax(district_id, age, new_date, dose_type);
+      }, runtime);
+      
+    }
+
+    function cancelRequest() {
+      clearInterval(runInterval);
+      document.getElementById('loading').innerHTML = '';
+      document.getElementById('resultUi').innerHTML = '';
+    }
+    function runAjax(district_id, age, date, dose_type) {
+      document.getElementById('loading').innerHTML = 'Running...';
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        var resultUi = document.querySelector('#resultUi');
+
+        if(this.readyState == 4 && this.status == 401) {
+          alert('Invalid request!');
+          cancelRequest();
+        }
+        if (this.readyState == 4 && this.status == 200) {
+          var d = new Date();
+          var time = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+          var success = false;
+
+          var response = JSON.parse(this.responseText);
+          if(response.centers != undefined) {
+
+            (response.centers).forEach(function(center, index) {   
+
+              if(center.sessions != undefined) {
+
+                center.sessions.forEach(function(session, ind) {
+
+                  if(dose_type == 1) {
+                    var d_type = 'available_capacity_dose1';
+                  } else {
+                    var d_type = 'available_capacity_dose2';
+                  }
+
+                  if(session[d_type] > 0) {
+                    let li = document.createElement('li');
+                    li.className = 'success';
+                    li.innerHTML = '<p><b>Available - '+session[d_type]+' slots - '+session.min_age_limit+'+ Age - '+session.date+' - '+center.fee_type+' - '+session.vaccine+'</b></p><p>'+center.name+', '+center.address+', '+center.block_name+', '+center.district_name+'  - '+time+'</p>';
+                    resultUi.prepend(li);
+                    success = true;
+                  }
+
+                });
+              }
+            });
+          }
+          if(!success) {
+            let li = document.createElement('li');
+            li.textContent = 'N/A -'+time;
+            resultUi.prepend(li);
+          }
+        }
+      };
+      xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id="+district_id+"&date="+date, true);
+      xhttp.send();
+    }
+    </script>
 </body>
 </html>
