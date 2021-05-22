@@ -13,13 +13,17 @@
       }
       .result-td {
         background: rgb(247, 247, 247);
-        height: 400px;
-        overflow-y: auto;
+        height: 300px !important;
+        overflow: auto;
       }
       .success {
         font-size : 15px;
         background: rgb(19, 126, 5) !important;
         color: #fff;
+      }
+      .inst {
+        color: #000;
+        border-bottom: 0;
       }
       ul {
         padding-left: 0;
@@ -45,7 +49,24 @@
       <td>Select District</td>
       <td>
         <select id="district" name="district">
-          <option value="505">Jaipur 1</option>
+          <option value="154">Ahmedabad</option>
+          <option value="507">Ajmer</option>
+          <option value="512">Alwar</option>
+          <option value="108">Chandigarh</option>
+          <option value="530">Churu</option>
+          <option value="153">Gandhinagar</option>
+          <option value="188">Gurgaon</option>
+          <option value="505" selected>Jaipur I</option>
+          <option value="506">Jaipur II</option>
+          <option value="510">Jhunjhunu</option>
+          <option value="488">Ludhiana</option>
+          <option value="140">New Delhi</option>
+          <option value="202">Rewari</option>
+          <option value="498">Sangrur</option>
+          <option value="513">Siker</option>
+          <option value="509">Sri Ganganagar</option>
+          <option value="526">Tonk</option>
+          <option value="142">West Delhi</option>
         </select>
       </td>
       <td>Select Age</td>
@@ -86,6 +107,24 @@
   <br/>
   <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
     <tr>
+      <td colspan="4" align="center"><h3>Important</h3></td>
+    </tr>
+    <tr>
+      <td colspan="4" valign="top">
+        <ul>
+          <li class="inst">
+            <p>* Login to <a href="https://selfregistration.cowin.gov.in/" target="_blank">Cowin</a> immediately when you see the available slot.</p>
+            <p>* Check availability only when you need.</p>
+            <p>* Script will stop after 15 mins.</p>
+            <p>* A sound will be played when any slot available.</p>
+          </li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+    <tr>
       <td colspan="4" align="center"><h3>Result Display</h3></td>
     </tr>
     <tr>
@@ -113,7 +152,9 @@
       var dose_type = (document.getElementById('dose1').checked)?1:2;
       var runtime = document.getElementById('timeout').value;
       runtime = runtime*1000;
-      
+      cancelRequest();
+      document.getElementById('resultUi').innerHTML = '';
+
       if(v_date == '' || v_date == null) {
         alert('Select date');
         return false;
@@ -132,7 +173,6 @@
     function cancelRequest() {
       clearInterval(runInterval);
       document.getElementById('loading').innerHTML = '';
-      document.getElementById('resultUi').innerHTML = '';
     }
     function runAjax(district_id, age, date, dose_type) {
       document.getElementById('loading').innerHTML = 'Running...';
@@ -141,8 +181,8 @@
         var resultUi = document.querySelector('#resultUi');
 
         if(this.readyState == 4 && this.status == 401) {
-          alert('Invalid request!');
-          cancelRequest();
+          // alert('Invalid request!');
+          // cancelRequest();
         }
         if (this.readyState == 4 && this.status == 200) {
           var d = new Date();
@@ -163,8 +203,8 @@
                   } else {
                     var d_type = 'available_capacity_dose2';
                   }
-
-                  if(session[d_type] > 0) {
+                  console.log(d_type, session.min_age_limit);
+                  if(session[d_type] > 0 && session.min_age_limit == age) {
                     let li = document.createElement('li');
                     li.className = 'success';
                     li.innerHTML = '<p><b>Available - '+session[d_type]+' slots - '+session.min_age_limit+'+ Age - '+session.date+' - '+center.fee_type+' - '+session.vaccine+'</b></p><p>'+center.name+', '+center.address+', '+center.block_name+', '+center.district_name+'  - '+time+'</p>';
@@ -180,12 +220,19 @@
             let li = document.createElement('li');
             li.textContent = 'N/A -'+time;
             resultUi.prepend(li);
+          } else {
+            var audio = new Audio('vaccine-beep.mp3');
+            audio.play();
           }
         }
       };
       xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id="+district_id+"&date="+date, true);
       xhttp.send();
     }
+
+    setTimeout(function() {
+      cancelRequest();
+    },900000);
     </script>
 </body>
 </html>
