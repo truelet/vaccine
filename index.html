@@ -50,103 +50,136 @@
     </script>
   </head>
 <body>
-  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+  <table align="center" border="0" cellpadding="0" style="width: 100%" cellspacing="0">
     <tr>
-      <td colspan="4" align="center"><h3>Check Vaccination Availibility</h3></td>
-    </tr>
-    <tr>
-      <td>Select District</td>
-      <td>
-        <select id="district" name="district">
-          <option value="154">Ahmedabad</option>
-          <option value="507">Ajmer</option>
-          <option value="512">Alwar</option>
-          <option value="108">Chandigarh</option>
-          <option value="530">Churu</option>
-          <option value="153">Gandhinagar</option>
-          <option value="188">Gurgaon</option>
-          <option value="505" selected>Jaipur I</option>
-          <option value="506">Jaipur II</option>
-          <option value="510">Jhunjhunu</option>
-          <option value="488">Ludhiana</option>
-          <option value="140">New Delhi</option>
-          <option value="202">Rewari</option>
-          <option value="498">Sangrur</option>
-          <option value="513">Siker</option>
-          <option value="509">Sri Ganganagar</option>
-          <option value="526">Tonk</option>
-          <option value="142">West Delhi</option>
-        </select>
+      <td style="width:20%; border: 0;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- Vaccine -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-2432110103578949"
+            data-ad-slot="8588963856"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
       </td>
-      <td>Select Age</td>
-      <td>
-        <input type="radio" name="age" id="age18" value="18" checked> <label for="age18">18-44</label> &nbsp;&nbsp;
-        <input type="radio" name="age" id="age45" value="45"> <label for="age45">45+</label>
+      <td style="width:60%; border: 0;" valign="top" align="center">
+        <table align="center" style="width: 100%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+          <tr>
+            <td colspan="4" align="center"><h3>Check Vaccination Availibility</h3></td>
+          </tr>
+          <tr>
+            <td>Select District</td>
+            <td>
+              <select id="district" name="district">
+                <option value="154">Ahmedabad</option>
+                <option value="507">Ajmer</option>
+                <option value="512">Alwar</option>
+                <option value="108">Chandigarh</option>
+                <option value="530">Churu</option>
+                <option value="153">Gandhinagar</option>
+                <option value="188">Gurgaon</option>
+                <option value="505" selected>Jaipur I</option>
+                <option value="506">Jaipur II</option>
+                <option value="510">Jhunjhunu</option>
+                <option value="488">Ludhiana</option>
+                <option value="140">New Delhi</option>
+                <option value="202">Rewari</option>
+                <option value="498">Sangrur</option>
+                <option value="513">Siker</option>
+                <option value="509">Sri Ganganagar</option>
+                <option value="526">Tonk</option>
+                <option value="142">West Delhi</option>
+              </select>
+            </td>
+            <td>Select Age</td>
+            <td>
+              <input type="radio" name="age" id="age18" value="18" checked> <label for="age18">18-44</label> &nbsp;&nbsp;
+              <input type="radio" name="age" id="age45" value="45"> <label for="age45">45+</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Select Date</td>
+            <td>
+              <input type="date" name="v_date" id="v_date" value="" />
+            </td>
+            <td>Select Dose</td>
+            <td>
+              <input type="radio" name="dose" id="dose1" value="1" checked> <label for="dose1">Dose 1</label> &nbsp;&nbsp;
+              <input type="radio" name="dose" id="dose2" value="2"> <label for="dose2">Dose 2</label>
+            </td>
+          </tr>
+          <tr>
+            <td>Check in Every</td>
+            <td>
+              <select id="timeout" name="timeout">
+                <option value="5" selected>5 Sec</option>
+                <option value="15">15 Sec</option>
+                <option value="30">30 Sec</option>
+                <option value="60">1 Min</option>
+                <option value="300">5 Min</option>
+              </select>
+            </td>
+            <td colspan="2">
+              <button id="submit" type="button" onclick="submitForm()">Check Availibility</button>
+              <button id="cancel" type="button" onclick="cancelRequest()">Cancel</button>
+              <span id="loading"></span>
+            </td>
+          </tr>
+        </table>
+        <br/>
+        <table align="center" style="width: 100%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+          <tr>
+            <td colspan="4" align="center"><h3>Important</h3></td>
+          </tr>
+          <tr>
+            <td colspan="4" valign="top">
+              <ul>
+                <li class="inst">
+                  <p>* Login to <a href="https://selfregistration.cowin.gov.in/" target="_blank">Cowin</a> immediately when you see the available slot.</p>
+                  <p>* Check availability only when you need.</p>
+                  <p>* Script will stop after 30 mins.</p>
+                  <p>* A sound will be played when any slot available.</p>
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+        <br/>
+        <table align="center" style="width: 100%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
+          <tr>
+            <td colspan="4" align="center"><h3>Result Display</h3></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="result-td" valign="top">
+              <ul class="result-ul" id="resultUi">
+                <!-- <li class="success">
+                  <p><b>Available - 100 slots - 18+ Age - 21-05-2021 - Free - COVISHIELD</b></p>
+                  <p>Bhabhru Phc, Bhabhru, Virat Nagar, Jaipur I  - 04:50PM</p>
+                </li> -->
+              </ul>
+            </td>
+          </tr>
+        </table>
       </td>
-    </tr>
-    <tr>
-      <td>Select Date</td>
-      <td>
-        <input type="date" name="v_date" id="v_date" value="" />
-      </td>
-      <td>Select Dose</td>
-      <td>
-        <input type="radio" name="dose" id="dose1" value="1" checked> <label for="dose1">Dose 1</label> &nbsp;&nbsp;
-        <input type="radio" name="dose" id="dose2" value="2"> <label for="dose2">Dose 2</label>
-      </td>
-    </tr>
-    <tr>
-      <td>Check in Every</td>
-      <td>
-        <select id="timeout" name="timeout">
-          <option value="5" selected>5 Sec</option>
-          <option value="15">15 Sec</option>
-          <option value="30">30 Sec</option>
-          <option value="60">1 Min</option>
-          <option value="300">5 Min</option>
-        </select>
-      </td>
-      <td colspan="2">
-        <button id="submit" type="button" onclick="submitForm()">Check Availibility</button>
-        <button id="cancel" type="button" onclick="cancelRequest()">Cancel</button>
-        <span id="loading"></span>
+      <td style="border: 0;">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- Vaccine -->
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-client="ca-pub-2432110103578949"
+            data-ad-slot="8588963856"
+            data-ad-format="auto"
+            data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
       </td>
     </tr>
   </table>
-  <br/>
-  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
-    <tr>
-      <td colspan="4" align="center"><h3>Important</h3></td>
-    </tr>
-    <tr>
-      <td colspan="4" valign="top">
-        <ul>
-          <li class="inst">
-            <p>* Login to <a href="https://selfregistration.cowin.gov.in/" target="_blank">Cowin</a> immediately when you see the available slot.</p>
-            <p>* Check availability only when you need.</p>
-            <p>* Script will stop after 30 mins.</p>
-            <p>* A sound will be played when any slot available.</p>
-          </li>
-        </ul>
-      </td>
-    </tr>
-  </table>
-  <br/>
-  <table align="center" style="width: 60%; border: 1px solid #ccc;" border="1" cellpadding="5" cellspacing="0">
-    <tr>
-      <td colspan="4" align="center"><h3>Result Display</h3></td>
-    </tr>
-    <tr>
-      <td colspan="4" class="result-td" valign="top">
-        <ul class="result-ul" id="resultUi">
-          <!-- <li class="success">
-            <p><b>Available - 100 slots - 18+ Age - 21-05-2021 - Free - COVISHIELD</b></p>
-            <p>Bhabhru Phc, Bhabhru, Virat Nagar, Jaipur I  - 04:50PM</p>
-          </li> -->
-        </ul>
-      </td>
-    </tr>
-  </table>
+  
   <script type="text/javascript">
     var runInterval;
     var td = new Date();
