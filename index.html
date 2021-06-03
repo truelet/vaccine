@@ -138,7 +138,7 @@
             <td colspan="4" valign="top">
               <ul>
                 <li class="inst">
-                  <p>* Login to <a href="https://selfregistration.cowin.gov.in/" target="_blank">Cowin</a> immediately when you see the available slot.</p>
+                  <p>* Login to <a href="https://selfregistration.cowin.gov.in/dashboard" target="_blank">Cowin</a> immediately when you see the available slot.</p>
                   <p>* Check availability only when you need.</p>
                   <p>* Script will stop after 30 mins.</p>
                   <p>* A sound will be played when any slot available.</p>
@@ -183,7 +183,7 @@
     var runInterval;
     var td = new Date();
     var m = td.getMonth()+1;
-    var cdate = td.getFullYear()+'-'+(('0' + m).slice(-2))+'-'+td.getDate();
+    var cdate = td.getFullYear()+'-'+(('0' + m).slice(-2))+'-'+(('0' + td.getDate()).slice(-2));
     document.getElementById('v_date').value = cdate;
 
     function submitForm() {
@@ -202,7 +202,7 @@
       }
       var d = new Date(v_date);
       var month = d.getMonth()+1;
-      var new_date = d.getDate()+'-'+(('0' + month).slice(-2))+'-'+d.getFullYear();
+      var new_date = (('0' + d.getDate()).slice(-2))+'-'+(('0' + month).slice(-2))+'-'+d.getFullYear();
       
       runAjax(district_id, age, new_date, dose_type);
       runInterval = setInterval(function() {
