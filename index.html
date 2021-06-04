@@ -256,13 +256,14 @@
           var success = false;
 
           var response = JSON.parse(this.responseText);
-          if(response.centers != undefined) {
+          // if(response.centers != undefined) {
 
-            (response.centers).forEach(function(center, index) {   
+          //   (response.centers).forEach(function(center, index) {   
 
-              if(center.sessions != undefined) {
+              // if(center.sessions != undefined) {
+              if(response.sessions != undefined) {
 
-                center.sessions.forEach(function(session, ind) {
+                response.sessions.forEach(function(session, ind) {
 
                   if(dose_type == 1) {
                     var d_type = 'available_capacity_dose1';
@@ -273,15 +274,15 @@
                   if(session[d_type] > 0 && session.min_age_limit == age) {
                     let li = document.createElement('li');
                     li.className = 'success';
-                    li.innerHTML = '<p><b>Available - '+session[d_type]+' slots - '+session.min_age_limit+'+ Age - '+session.date+' - '+center.fee_type+' - '+session.vaccine+'</b></p><p>'+center.name+', '+center.address+', '+center.block_name+', '+center.district_name+'  - '+time+'</p>';
+                    li.innerHTML = '<p><b>Available - '+session[d_type]+' slots - '+session.min_age_limit+'+ Age - '+session.date+' - '+session.fee_type+' - '+session.vaccine+'</b></p><p>'+session.name+', '+session.address+', '+session.block_name+' - '+time+'</p>';
                     resultUi.prepend(li);
                     success = true;
                   }
 
                 });
               }
-            });
-          }
+          //   });
+          // }
           if(!success) {
             let li = document.createElement('li');
             li.textContent = 'N/A -'+time;
@@ -292,7 +293,7 @@
           }
         }
       };
-      xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id="+district_id+"&date="+date, true);
+      xhttp.open("GET", "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id="+district_id+"&date="+date, true);
       xhttp.send();
     }
 
